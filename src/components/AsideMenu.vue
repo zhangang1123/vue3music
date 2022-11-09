@@ -1,7 +1,7 @@
 <template>
 <el-menu default-active="2" active-text-color="red">
     <el-menu-item index="1">
-        <h4>发现音乐</h4>
+        发现音乐
     </el-menu-item>
     <el-menu-item index="2" disabled>
         视频

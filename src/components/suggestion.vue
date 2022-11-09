@@ -32,10 +32,10 @@ export default {
     border-radius: 10px;
     margin-top: 20px;
     background-color: #fff;
-    border: 1px solid rgb(200, 194, 194);
     box-shadow: 0 1px 4px #dddddd;
     color: #000;
     overflow: auto;
+    z-index: 1000;
 }
 
 .hot-item {
