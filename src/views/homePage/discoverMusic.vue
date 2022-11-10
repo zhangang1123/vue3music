@@ -28,7 +28,11 @@ function changeRoute(e)
 </script>
 
 <style scoped>
+/* .find-header{
+    height:90px ;
+} */
 .routeList{
+    /* position: fixed; */
     display:flex;
     font-size:14px;
     cursor: pointer;

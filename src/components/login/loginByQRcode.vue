@@ -4,13 +4,67 @@
         <a href="https://music.163.com/#/download" target="_blank" style="text-decoration: none; color: blue;">网易云音乐手机端</a>扫码登陆</div>
     </div>
     <div class="QRcode">
-        <img src="data:image/png;base64,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" alt="扫码登陆">
+        <img :src="imgData" alt="扫码登陆">
     </div>
-    <div class="qr-title">状态：等待扫码</div>
+    <div class="qr-title">状态：{{status}}</div>
 </template>
 
-<script>
-
+<script setup>
+import { getQrKey, getQrImg, checkQr } from "../../api/login";
+import { ref, onBeforeUnmount,} from 'vue';
+import {useStore} from 'vuex'
+import {useRouter} from 'vue-router'
+let key;
+let imgData=ref('');
+let status=ref('');
+let time;
+let userInfo;
+const store=useStore();
+const router=useRouter();
+async function getKey(){
+    const res = await getQrKey(Date.now());
+    if(res.data.data.code==200)
+    {
+        key = res.data.data.unikey
+        getImgData(key);
+        checkQrcode(key);
+    }
+}
+async function getImgData(key){
+    const res=await getQrImg(key);
+    if (res.data.code == 200)
+    {
+        imgData.value = res.data.data.qrimg
+        time = setInterval(() => {
+            checkQrcode(key);
+        }, 1000);
+    }
+}
+async function checkQrcode(key){
+    const res= await checkQr(key);
+    console.log(res.data);
+    if(res.data.code==800)
+    {
+        status.value=res.data.message;
+    }
+    else if (res.data.code == 801) {
+        status.value = res.data.message;
+    } 
+    else if (res.data.code == 802) {
+        status.value = res.data.message;
+        console.log(res.data);
+        userInfo = { nickname: res.data.nickname, avatar: res.data.avatarUrl }
+    }
+    else if (res.data.code == 803) {
+        status.value = res.data.message;
+        store.commit('changeState',userInfo);
+        router.replace({ name: 'center' });
+    }
+}
+getKey()
+onBeforeUnmount(()=>{
+    clearInterval(time);
+})
 </script>
 
 <style scoped>

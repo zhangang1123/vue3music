@@ -21,10 +21,12 @@
     <div 
     @click="goLogin()"
     class="avatar-wrap mleft-12 pointer div-type" >
-                <el-avatar :icon="UserFilled" :size="30"/>
+                <el-avatar :icon="UserFilled" :size="30"  :src="store.state.userInfo.avatar"/>
     </div>
-    <div class="login-info mleft-10 font-12 text-hidden pointer" >
-        未登录
+    <div 
+    @click="logout()"
+    class="login-info mleft-10 font-12 text-hidden pointer" >
+        {{ store.state.userInfo.nickname??'未登录'}}
     </div>
 </div>
 </template>
@@ -33,14 +35,29 @@
 import suggestion from "./suggestion.vue"
 import { Search } from '@element-plus/icons-vue'
 import { UserFilled } from '@element-plus/icons-vue'
-import {ref} from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
+import { useStore } from "vuex";
 let isblur=ref(false)
 let input=ref('');
+let dialogVisible=ref(false);
 let router=useRouter();
+let store=useStore();
 function goLogin()
 {
     router.push({name: 'login'});
+}
+function logout(){
+    if(store.state.isLogin){
+        ElMessageBox.confirm('你想要退出登录吗？?')
+            .then(() => {
+                localStorage.clear();
+                router.push({ name: 'login' });
+            })
+            .catch(() => {
+                // catch error
+            })
+    }
 }
 </script>
 

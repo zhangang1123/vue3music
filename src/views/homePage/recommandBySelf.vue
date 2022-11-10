@@ -1,8 +1,8 @@
 <template>
   <div class="recommand">
     <el-carousel :interval="4000" type="card" height="200px">
-      <el-carousel-item v-for="item in 6" :key="item">
-        <img src="../../assets/img/login.jpg" alt="error">
+      <el-carousel-item v-for="item in banners" :key="item.targetId">
+        <img :src="item.imageUrl" alt="error" class="bannerImg">
       </el-carousel-item>
     </el-carousel>
     <div class="recommandBody">
@@ -11,10 +11,10 @@
         <i class="iconfont icon-arrow-right"></i>
       </h2>
       <ul  class="recommandList">
-        <li class="recommandItem" v-for="item in 10" :key="item">
-          <img src="https://p2.music.126.net/dMlINUxUskjYg30JTRYexw==/19221662277102979.jpg?param=300y300" alt="歌单封面">
-          <div class="songList_info">粤语女声：永远心仪</div>
-          <div class="songList_views"><i class="iconfont icon-24gl-play"></i> 3704万
+        <li class="recommandItem" v-for="item in playlists" :key="item.id">
+          <img :src="item.coverImgUrl" alt="歌单封面">
+          <div class="songList_info">{{item.name}}</div>
+          <div class="songList_views"><i class="iconfont icon-24gl-play"></i> {{ Math.floor(item.playCount/10000 )}}万
           </div>
           <div class="play-btn"><i class="iconfont icon-bofang" style="line-height:32px"></i></div>
         </li>
@@ -23,13 +23,25 @@
   </div>
 </template>
 
-<script>
-export default {
-
-}
+<script setup>
+import { getBanners, dailyRecommand } from '../../api/homePage'
+import { reactive ,ref} from 'vue';
+let banners = ref([]);
+let playlists = ref([]);
+getBanners().then(res => {
+  banners.value=res.data.banners;
+})
+dailyRecommand().then(res => {
+  playlists.value=res.data.playlists;
+})
 </script>
 
 <style scoped>
+.bannerImg{
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+}
 .play-btn{
     position: absolute;
     right: 15px;

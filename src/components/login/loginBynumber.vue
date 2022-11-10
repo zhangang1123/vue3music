@@ -15,6 +15,7 @@
 </template>
 
 <script setup>
+import {loginByPhone} from '../../api/login'
 import { Iphone,Key } from '@element-plus/icons-vue'
 
 </script>
