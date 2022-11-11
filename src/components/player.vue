@@ -49,7 +49,7 @@
                 </div>
         
                 <div class="volume-slider">
-                    <el-slider v-model="volume" vertical height="200px"> </el-slider>
+                    <el-slider  vertical height="200px"> </el-slider>
                 </div>
             </div>
             <!-- 当前播放列表 -->
@@ -58,9 +58,14 @@
             </div>
         </div>
         <el-drawer 
+        title="正在播放"
         :append-to-body="true"
         v-model="showList">
-            <span>Hi there!</span>
+            <el-table :data="tableData" highlight-current-row height="250" style="width: 100%">
+                <el-table-column prop="name" label="name" width="180" />
+                <el-table-column prop="songer" label="歌手" width="180" />
+                <el-table-column prop="time" label="时长" />
+            </el-table>
         </el-drawer>
     </div>
 </div>
@@ -70,7 +75,7 @@
 import { Download } from '@element-plus/icons-vue'
 import { ref } from 'vue';
 let showList=ref(false);
-
+let tableData=[{name:'1',songer:'2',time:'2'}]
 </script>
 
 <style>

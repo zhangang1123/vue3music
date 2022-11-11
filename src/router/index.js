@@ -11,23 +11,28 @@ const routes = [
     redirect:'/homePage',
     children: [
       {
-        name:homePage,
+        name:'homePage',
         path: '/homePage',
         component:homePage,
         redirect: '/discoverMusic',
         children: [
           {
-            name:discoverMusic,
+            name:'discoverMusic',
             path: '/discoverMusic',
             component:discoverMusic,
             redirect: '/recommandBySelf',
             children: [
               {
-                name:recommandBySelf,
+                name:'recommandBySelf',
                 path: '/recommandBySelf',
                 component:recommandBySelf
               }
             ]
+          },
+          {
+            name:'songListDetail',
+            path: '/songListDetail',
+            component:()=>import('../views/songListDetail.vue'),
           }
         ]
       }

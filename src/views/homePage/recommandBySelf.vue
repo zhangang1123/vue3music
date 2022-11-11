@@ -11,7 +11,9 @@
         <i class="iconfont icon-arrow-right"></i>
       </h2>
       <ul  class="recommandList">
-        <li class="recommandItem" v-for="item in playlists" :key="item.id">
+        <li class="recommandItem" 
+        @click="songList_view(item.id)"
+        v-for="item in playlists" :key="item.id">
           <img :src="item.coverImgUrl" alt="歌单封面">
           <div class="songList_info">{{item.name}}</div>
           <div class="songList_views"><i class="iconfont icon-24gl-play"></i> {{ Math.floor(item.playCount/10000 )}}万
@@ -25,7 +27,9 @@
 
 <script setup>
 import { getBanners, dailyRecommand } from '../../api/homePage'
-import { reactive ,ref} from 'vue';
+import { ref} from 'vue';
+import {useRouter} from 'vue-router'
+const router =useRouter();
 let banners = ref([]);
 let playlists = ref([]);
 getBanners().then(res => {
@@ -34,6 +38,9 @@ getBanners().then(res => {
 dailyRecommand().then(res => {
   playlists.value=res.data.playlists;
 })
+function songList_view(id){
+  router.push({name:'songListDetail',query:{id,}});
+}
 </script>
 
 <style scoped>

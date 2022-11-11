@@ -4,10 +4,10 @@
         <i class="iconfont icon-logView"></i>
     </div>
     <div class="btn-history">
-        <button class="btn-circle">
+        <button class="btn-circle" @click="router.go(-1)">
             <i class="iconfont icon-arrow-left-bold"></i>
         </button>
-        <button class="btn-circle">
+        <button class="btn-circle" @click="router.go(1)">
             <i class="iconfont icon-arrow-right"></i>
         </button>
     </div>
