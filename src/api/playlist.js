@@ -9,3 +9,21 @@ export function playlistDetail(id) {
         }
     })
 }
+export function getSongDetails(id) {
+    return request({
+        url:'/song/detail',
+        method: 'GET',
+        params: {
+            ids:id,
+        }
+    })
+}
+export function getSongUrl(id) {
+    return request({
+        url:'/song/url',
+        method: 'GET',
+        params: {
+            id,
+        }
+    })
+}

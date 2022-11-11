@@ -1,10 +1,10 @@
 <template>
 <div class="player">
     <div class="player-left">
-        <img src="../assets/img/music.jpg" alt="songCover">
+        <img :src="songInfo.cover??'../'" alt="songCover">
         <div class="musicInfo">
-            <div style="font-size: 14px">Another Way</div>
-            <div style="font-size: 12px">Au5</div>
+            <div style="font-size: 14px">{{ songInfo.name}}</div>
+            <div style="font-size: 12px">{{ songInfo.ar}}</div>
         </div>
     </div>
     <div class="player-mid">
@@ -15,9 +15,9 @@
             <button class="player-bar-btn">
                 <i class="iconfont icon-shangyishou"></i>
             </button>
-            <button class="player-bar-btn">
-                <i class="iconfont icon-zanting"></i>
-                <!-- <i v-show="!isPlay" class="iconfont icon-bofang"></i> -->
+            <button class="player-bar-btn" @click="changePlaying" :disabled="!store.state.songPlaying">
+                <i v-show="store.state.isPlay" class="iconfont icon-zanting"></i>
+                <i v-show="!store.state.isPlay" class="iconfont icon-bofang"></i>
             </button>
             <button class="player-bar-btn" >
                 <i class="iconfont icon-xiayishou"></i>
@@ -28,11 +28,11 @@
             </button>
         </div>
         <div class="process-bar">
-            <span>00:00</span>
+            <span>00: 00</span>
             <div >
-                <el-slider class="timeSlider" :debounce="500" :show-tooltip="false" />
+                <el-slider v-model="currentPos" class="timeSlider" :debounce="500" :show-tooltip="false" />
             </div>
-            <span>3:14</span>
+            <span>{{ songInfo.duration??'00:00' }}</span>
         </div>
     </div>
     <div class="player-right">
@@ -68,14 +68,43 @@
             </el-table>
         </el-drawer>
     </div>
+    <audio ref="audio" :src="songInfo.url" autoplay="autoplay"></audio>
 </div>
 </template>
 
 <script setup>
 import { Download } from '@element-plus/icons-vue'
-import { ref } from 'vue';
+import {useStore} from 'vuex';
+import { ref, computed, isProxy } from 'vue';
+const store = useStore();
 let showList=ref(false);
-let tableData=[{name:'1',songer:'2',time:'2'}]
+let audio=ref(null);
+let songInfo=computed(()=>{
+    if (!store.state.songPlaying)
+    {
+        return { name: '未知音乐', ar: "未知歌手", cover:'http://47.102.159.133/img/music.af75de10.jpg',url:''};
+    }else{
+        return store.state.songPlaying;
+    }
+});
+let currentPos=computed({
+    get(){
+        // if(audio.value)
+        // {
+        //     return Math.floor(audio.value.currentTime )*100;
+        // }
+    },
+    set(val){
+        // console.log(audio.value.currentTime, val);
+
+    }
+})
+function changePlaying()
+{
+    store.state.isPlay ? audio.value.pause() : audio.value.play();
+    store.state.isPlay=!store.state.isPlay;
+    console.log(isProxy(audio.value));
+}
 </script>
 
 <style>
@@ -111,6 +140,7 @@ let tableData=[{name:'1',songer:'2',time:'2'}]
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 1000;
 }
 .player-left{
     height:50px;

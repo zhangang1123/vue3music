@@ -2,42 +2,38 @@
 <div class="songlist_details">
   <div class="detail_header">
     <div class="detailImg">
-        <img src="../assets/img/music.jpg" alt="">
+        <img :src="songsDetails.coverImgUrl" alt="">
     </div>
     <div class="songlist_info">
         <div class="info_title">
             <div class="tag">歌单</div>
-            <span style="font-size:20px;font-weight: bold;margin-left:14px;">夜晚温柔粤语女声 唱出谁的不眠心事</span>
+            <span style="font-size:20px;font-weight: bold;margin-left:14px;">{{ songsDetails.name }}</span>
         </div>
         <div class="auther">
             <div class="auther_img">
-                <img src="../assets/img/music.jpg" alt="">
+                <img :src="songsDetails.coverImgUrl" alt="">
             </div>
             <div class="auther-info">
                 <span>YouTube全球音乐</span>
-                <span style="margin-left:12px;font-size:12px">2018-01-06</span>
+                <span style="margin-left:12px;font-size:12px">{{ useTimestamps(songsDetails.updateTime) }}</span>
             </div>
         </div>
         <el-row class="mb-4">
             <el-button type="danger" :icon="VideoPlay" round>播放全部</el-button>
-            <el-button class="none" :icon="FolderChecked"   round>收藏(21万)</el-button>
-            <el-button class="none" :icon="Share"  round>分享(2517)</el-button>
+            <el-button class="none" :icon="FolderChecked"   round>收藏({{ Math.floor(songsDetails.subscribedCount/10000) }}万)</el-button>
+            <el-button class="none" :icon="Share"  round>分享({{ songsDetails.shareCount }})</el-button>
             <el-button type="danger" :icon="HotWater"  round>加载完整歌单</el-button>
         </el-row>
         <div class="tags">
             <span>标签：</span>
-            <span style="margin-right: 10px;">华语</span>
-            <span style="margin-right: 10px;">粤语</span>
-            <span style="margin-right: 10px;">流行</span>
+            <span style="margin-right: 10px;" v-for="(tag,index) in songsDetails.tags" :key="index">{{tag}}</span>
         </div>
         <div class="tags">
-            <span>歌曲：126</span>
-            <span style="margin-left: 12px;">播放：226万</span>
+            <span>歌曲：{{songsDetails.trackCount}}</span>
+            <span style="margin-left: 12px;">播放：{{ Math.floor(songsDetails.playCount /10000)}}万</span>
         </div>
         <div class="introduce" :class="{showIntroduce,}">
-            <p style="max-width: 1000px;">简介 ：人生总有许多巧合，两条平行线也可能会有交汇的一天。人生总有许多意外，握在手里面的风筝也会突然断了线。
-            在这个熟悉又陌生的城市中，无助地寻找一个陌生又熟悉的身影。我有酒，你有故事吗。或许你只是缺一个愿意听你诉说你的故事那陌生又熟悉的身影。
-            封面：张子枫</p>
+            <p style="max-width: 1000px;">{{ songsDetails.description }}</p>
         </div>
         <el-icon v-show="!showIntroduce" @click="showIntroduce=true">
             <CaretBottom />
@@ -52,50 +48,31 @@
         <li class="routeItem" @click="changeRoute('评论')" :class="{ actived: currentPage =='评论'}">评论(400)</li>
         <li class="routeItem" @click="changeRoute('收藏')" :class="{ actived: currentPage =='收藏'}">收藏</li>
     </ul>
-    <div class="songlist">
-        <el-table  :data="tableData" highlight-current-row :header-row-class-name="'table-header'">
-            <el-table-column type="index" width="50" />
-            <el-table-column label="音乐标题">
-                <template #default="scope">
-                    <div style="display: flex; align-items: center">
-                        <el-icon>
-                            <timer />
-                        </el-icon>
-                        <span style="margin-left: 10px">{{ scope.row.data}}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column property="name" label="歌手"/>
-            <el-table-column property="address" label="专辑" />
-            <el-table-column property="time" label="时长" />
-        </el-table>
-    </div>
+    <component :is="songs"></component>
 </div>
 </template>
 
 <script setup>
+import songs from './songListDetail/songs.vue';
 import { VideoPlay, Share, HotWater, FolderChecked, CaretBottom, CaretTop, Timer } from '@element-plus/icons-vue';
 import { useRoute } from 'vue-router';
 import { playlistDetail } from '../api/playlist';
-import {ref} from 'vue';
+import {useTimestamps } from '../hooks/timestamp';
+import { watch, ref,provide} from 'vue';
+// let currentOpt=ref({''})
 const route=useRoute();
 let showIntroduce=ref(false);
 let currentPage = ref('个性推荐');
-let tableData=[
-    { data: '暗号', name: '周杰伦', address: '八度空间', time: '3:23' },
-    {data:'暗号',name:'周杰伦',address:'八度空间',time:'3:23'},
-    {data:'暗号',name:'周杰伦',address:'八度空间',time:'3:23'},
-    {data:'暗号',name:'周杰伦',address:'八度空间',time:'3:23'},
-    {data:'暗号',name:'周杰伦',address:'八度空间',time:'3:23'},
-    { data: '暗号', name: '周杰伦', address: '八度空间', time: '3:23' },
-]
+let songsDetails = ref({});
+provide('songsDetails', songsDetails);
 function changeRoute(to)
 {
     currentPage.value=to;
 }
 async function songlistDetail(id){
     const res=await playlistDetail(id);
-    console.log(res);
+    console.log(res.data.playlist.tracks);
+    songsDetails .value=res.data.playlist
 }
 songlistDetail(route.query.id)
 </script>
