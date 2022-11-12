@@ -1,6 +1,6 @@
 <template>
-<el-menu default-active="1" active-text-color="red">
-    <el-menu-item index="1">
+<el-menu :default-active="defaultLight" router>
+    <el-menu-item index="discoverMusic" :route="{ name:'discoverMusic'}">
         发现音乐
     </el-menu-item>
     <el-menu-item index="2" :disabled="!store.state.isLogin">
@@ -12,7 +12,7 @@
     <el-menu-item index="4" :disabled="!store.state.isLogin">
         每日推荐
     </el-menu-item>
-    <el-menu-item index="5">
+    <el-menu-item index="recentlyPlay" :route="{ name:'recentlyPlay'}">
         最近播放
     </el-menu-item>
     <el-menu-item index="6" :disabled="!store.state.isLogin">
@@ -23,7 +23,18 @@
 
 <script setup>
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
+import {  computed } from 'vue';
 let store = useStore();
+let route = useRoute();
+let defaultLight=computed(()=>{
+    if (route.name == 'recommandBySelf' || route.name == 'songList')
+    {
+        return 'discoverMusic';
+    }else{
+        return route.name;
+    }
+});
 </script>
 
 <style scoped>

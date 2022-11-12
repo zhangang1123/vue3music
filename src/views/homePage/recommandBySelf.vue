@@ -6,7 +6,7 @@
       </el-carousel-item>
     </el-carousel>
     <div class="recommandBody">
-      <h2 class="page-header">
+      <h2 class="page-header" @click="router.push({ name:'songList'})">
         热门推荐
         <i class="iconfont icon-arrow-right"></i>
       </h2>

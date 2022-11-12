@@ -61,7 +61,7 @@
         title="正在播放"
         :append-to-body="true"
         v-model="showList">
-            <el-table :data="playlist" @row-click="playSong" highlight-current-row  style="width: 100%">
+            <el-table :data="playlist" @row-click="playSong" highlight-current-row  style="width: 100%" empty-text = "当前没有音乐哦~">
                 <el-table-column prop="name" label="name" width="180" />
                 <el-table-column prop="ar[0].name" label="歌手" width="180" />
                 <el-table-column prop="dt" :formatter="formatTime" label="时长" />

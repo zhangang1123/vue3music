@@ -7,6 +7,7 @@ export default createStore({
     isPlay:false,
     playlist:[],
     songPlaying:null,
+    historylist:JSON.parse(localStorage.getItem('historylist'))||[],
   },
   mutations: {
     changeState(state,Info){
@@ -18,6 +19,15 @@ export default createStore({
     playSong(state,songInfo){
       state.isPlay=true;
       state.songPlaying= songInfo;
+      for(let item of state.historylist)
+      {
+        if(item.id==songInfo.id)
+        {
+          return;
+        }
+      }
+      state.historylist.push(songInfo);
+      sessionStorage.setItem('historylist',JSON.stringify(state.historylist));
     },
     changePlaylist(state,songlist){
       state.playlist=songlist;
