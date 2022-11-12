@@ -66,7 +66,7 @@ function songList_view(id){
   opacity: 1;
 }
 .recommand{
-  width: 1200px;
+  width: 85%;
   margin: 0 auto;
 }
 .page-header{

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory  } from 'vue-router'
 import centre from '../views/centre.vue';
 import homePage from '../views/homePage/homePage';
 import discoverMusic from '../views/homePage/discoverMusic';
@@ -26,6 +26,11 @@ const routes = [
                 name:'recommandBySelf',
                 path: '/recommandBySelf',
                 component:recommandBySelf
+              },
+              {
+                name:'songList',
+                path: '/songList',
+                component:()=>import('../views/homePage/songList.vue'),
               }
             ]
           },
@@ -46,7 +51,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(),
   routes
 })
 

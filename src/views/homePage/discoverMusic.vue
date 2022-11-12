@@ -1,28 +1,36 @@
 <template>
   <div class="find-header">
     <ul class="routeList" @click="changeRoute($event)">
-        <li class="routeItem" :class="{ actived: currentPage =='个性推荐'}">个性推荐</li>
-        <li class="routeItem" :class="{ actived: currentPage =='歌单'}">歌单</li>
-        <li class="routeItem" :class="{ actived: currentPage =='排行榜'}">排行榜</li>
-        <li class="routeItem" :class="{ actived: currentPage =='歌手'}">歌手</li>
-        <li class="routeItem" :class="{ actived: currentPage =='最新音乐'}">最新音乐</li>
+        <li class="routeItem" :class="{ actived: route.name =='recommandBySelf'}">个性推荐</li>
+        <li class="routeItem" :class="{ actived: route.name =='songList'}">歌单</li>
+        <li class="routeItem" :class="{ actived: route.name =='排行榜'}">排行榜</li>
+        <li class="routeItem" :class="{ actived: route.name =='歌手'}">歌手</li>
+        <li class="routeItem" :class="{ actived: route.name =='最新音乐'}">最新音乐</li>
     </ul>
   </div>
   <router-view></router-view>
 </template>
 
 <script setup>
-import {ref} from "vue"
-let currentPage=ref("个性推荐");
+import {ref} from "vue";
+import {useRouter,useRoute} from 'vue-router';
+let router = useRouter();
+let route = useRoute();
 function changeRoute(e)
 {
     switch (e.target.innerText)
     {
-        case '个性推荐': currentPage.value = '个性推荐'; break;
-        case '歌单': currentPage.value ='歌单';break;
-        case '排行榜': currentPage.value ='排行榜';break;
-        case '歌手': currentPage.value ='歌手';break;
-        case '最新音乐': currentPage.value = '最新音乐'; break;
+        case '个性推荐': {
+            router.push({ name: 'recommandBySelf' })
+            break;
+        }
+        case '歌单': {
+            router.push({name: 'songList'})
+            break;
+        }
+        case '排行榜': break;
+        case '歌手':break;
+        case '最新音乐': break;
     }
 }
 </script>

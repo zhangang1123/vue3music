@@ -7,8 +7,8 @@
         <el-table-column label="音乐标题">
             <template #default="scope">
                 <div style="display: flex; align-items: center">
-                    <i class="iconfont icon-aixin"></i>
-                    <i v-show="false" class="iconfont icon-aixin1" style="color: rgb(236, 65, 65);"></i>
+                    <i v-login class="iconfont icon-aixin"></i>
+                    <i v-show="false" v-login class="iconfont icon-aixin1" style="color: rgb(236, 65, 65);"></i>
                     <span style="margin-left: 10px">{{ scope.row.name }}</span>
                 </div>
             </template>
@@ -36,11 +36,15 @@ async function playSong(row) {
     const res = await getSongDetails(row.id);
     let songInfo = { id: res.data.songs[0].id, name: res.data.songs[0].name,duration: formatTime(row),
         cover: res.data.songs[0].al.picUrl, ar: res.data.songs[0].ar[0].name,url:''}
-    store.dispatch('changeSong',{id:row.id,songInfo})
+    store.dispatch('changeSong',{id:row.id,songInfo});
+    store.commit('changePlaylist', songsDetails);
 }
 </script>
 
 <style scoped>
+.iconfont{
+    cursor: pointer;
+}
 .songlist{
     margin-bottom: 70px;
 }
