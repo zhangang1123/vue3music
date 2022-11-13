@@ -44,25 +44,26 @@
     </div>
   </div>
     <ul class="routeList">
-        <li class="routeItem" @click="changeRoute('个性推荐')" :class="{ actived: currentPage =='个性推荐'}">歌曲列表</li>
-        <li class="routeItem" @click="changeRoute('评论')" :class="{ actived: currentPage =='评论'}">评论(400)</li>
+        <li class="routeItem" @click="changeRoute('songs')" :class="{ actived: currentPage =='songs'}">歌曲列表</li>
+        <li class="routeItem" @click="changeRoute('comment')" :class="{ actived: currentPage =='comment'}">评论(400)</li>
         <li class="routeItem" @click="changeRoute('收藏')" :class="{ actived: currentPage =='收藏'}">收藏</li>
     </ul>
-    <component :is="songs"></component>
+    <component :is="currentOpt[currentPage]"></component>
 </div>
 </template>
 
 <script setup>
-import songs from './songListDetail/songs.vue';
 import { VideoPlay, Share, HotWater, FolderChecked, CaretBottom, CaretTop, Timer } from '@element-plus/icons-vue';
+import songs from './songListDetail/songs.vue';
+import comment from './songListDetail/comment.vue'
 import { useRoute } from 'vue-router';
 import { playlistDetail } from '../api/playlist';
 import {useTimestamps } from '../hooks/timestamp';
 import { watch, ref,provide} from 'vue';
-// let currentOpt=ref({''})
+let currentOpt=ref({songs,comment,})
 const route=useRoute();
 let showIntroduce=ref(false);
-let currentPage = ref('个性推荐');
+let currentPage = ref('songs');
 let songsDetails = ref({});
 provide('songsDetails', songsDetails);
 function changeRoute(to)

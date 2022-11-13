@@ -7,7 +7,7 @@ export default createStore({
     isPlay:false,
     playlist:[],
     songPlaying:null,
-    historylist:JSON.parse(localStorage.getItem('historylist'))||[],
+    historylist:JSON.parse(sessionStorage.getItem('historylist'))||[],
   },
   mutations: {
     changeState(state,Info){

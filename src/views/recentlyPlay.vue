@@ -7,7 +7,7 @@
         </div>
         <div style="cursor: pointer;" @click="clearHistroy()">清除列表</div>
     </div>
-    <button class="play_all">
+    <button class="play_all" @click="changeList">
     <i class="iconfont icon-bofang"></i>
         播放全部
     </button>
@@ -42,6 +42,10 @@ function clearHistroy(){
 }
 function playSong(row) {
     store.commit('playSong',row);
+}
+function changeList(){
+    playSong(store.state.historylist[0])
+    store.commit('changePlaylist', []);
 }
 </script>
 

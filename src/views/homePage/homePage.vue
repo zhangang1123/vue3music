@@ -8,6 +8,7 @@
             <router-view></router-view>
         </el-main>
     </el-container>
+    <el-backtop :right="100" :bottom="100" />
 </template>
 
 <script setup>

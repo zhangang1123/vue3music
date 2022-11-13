@@ -175,10 +175,11 @@ function formatTime(row) {
     return m + s;
 }
 async function playSong(row){
+    console.log(row, formatTime(row));
     const res = await getSongDetails(row.id);
     let songInfo = {
         id: res.data.songs[0].id, name: res.data.songs[0].name, duration: formatTime(row),
-        cover: res.data.songs[0].al.picUrl, ar: res.data.songs[0].ar[0].name, url: ''
+        cover: res.data.songs[0].al.picUrl, ar: res.data.songs[0].ar[0].name, url: '', alname: res.data.songs[0].al.name
     }
     store.dispatch('changeSong', { id: row.id, songInfo });
 }

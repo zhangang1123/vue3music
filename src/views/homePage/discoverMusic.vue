@@ -3,9 +3,9 @@
     <ul class="routeList" @click="changeRoute($event)">
         <li class="routeItem" :class="{ actived: route.name =='recommandBySelf'}">个性推荐</li>
         <li class="routeItem" :class="{ actived: route.name =='songList'}">歌单</li>
-        <li class="routeItem" :class="{ actived: route.name =='排行榜'}">排行榜</li>
-        <li class="routeItem" :class="{ actived: route.name =='歌手'}">歌手</li>
-        <li class="routeItem" :class="{ actived: route.name =='最新音乐'}">最新音乐</li>
+        <li class="routeItem" :class="{ actived: route.name =='charts'}">排行榜</li>
+        <li class="routeItem" :class="{ actived: route.name =='singer'}">歌手</li>
+        <li class="routeItem" :class="{ actived: route.name =='latestMusic'}">最新音乐</li>
     </ul>
   </div>
   <router-view></router-view>
@@ -28,9 +28,18 @@ function changeRoute(e)
             router.push({name: 'songList'})
             break;
         }
-        case '排行榜': break;
-        case '歌手':break;
-        case '最新音乐': break;
+        case '排行榜': {
+            router.push({ name: 'charts' })
+            break;
+        }
+        case '歌手':{
+            router.push({ name: 'singer'});
+            break;
+        }
+        case '最新音乐':{
+            router.push({ name: 'latestMusic' });
+            break;
+        }
     }
 }
 </script>

@@ -31,6 +31,21 @@ const routes = [
                 name:'songList',
                 path: '/songList',
                 component:()=>import('../views/homePage/songList.vue'),
+              },
+              {
+                name:'charts',
+                path: '/charts',
+                component:()=>import('../views/homePage/charts')
+              },
+              {
+                name:'singer',
+                path: '/singer',
+                component:()=>import('../views/homePage/singer')
+              },
+              {
+                name:'latestMusic',
+                path: '/latestMusic',
+                component:()=>import('../views/homePage/latestMusic')
               }
             ]
           },
