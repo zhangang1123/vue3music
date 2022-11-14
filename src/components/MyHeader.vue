@@ -1,5 +1,5 @@
 <template>
-<div class="header-bar">
+<div class="header-bar"  @mouseleave="isblur=false">
     <div class="logo-wrap pointer" >
         <i class="iconfont icon-logView"></i>
     </div>
@@ -13,7 +13,6 @@
     </div>
     <div class="search-box" @keydown.enter="searchSong()">
         <el-input v-model="keywords" 
-        @blur="isblur=false"
         @focus="isblur=true"
         class="w-50 m-2" placeholder="输入你喜欢的音乐" :suffix-icon="Search" />
         <suggestion v-show="isblur"/>
@@ -50,7 +49,7 @@ function goLogin()
 function searchSong(){
     if (keywords.value == '')
         return;
-    router.push({ name: 'searchList', query: { keywords: keywords.value } });
+    router.replace({ name: 'searchList', query: { keywords: keywords.value } });
     keywords.value='';
 } 
 function logout(){
