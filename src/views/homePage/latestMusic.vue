@@ -35,7 +35,7 @@
                 <div class="index">{{index+1}}</div>
                 <img :src="song.album.picUrl" alt="newMusic">
                 <div class="sub-title font-14 mleft-10"> {{ song.name}} </div>
-                <div class="sub-item font-12" style="color: rgb(103, 103, 103);">{{ song.artists[0].name }}}</div>
+                <div class="sub-item font-12" style="color: rgb(103, 103, 103);">{{ song.artists[0].name }}</div>
                 <div class="sub-item font-12">{{  song.album.name}}</div>
                 <div class="sub-item font-12" style="width: 100px;text-align: center;"> {{ formatTime(song.duration) }} </div>
             </li>

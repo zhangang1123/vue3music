@@ -1,0 +1,110 @@
+<template>
+<div class="search_list">
+    <div class="font-bold">找到 {{total}} 首单曲</div>
+    <ul class="search-menu">
+        <li class="search-menu-item" :class="{ isActive: current_opt =='1'}" @click="getList('1')"> 单曲 </li>
+        <li class="search-menu-item" :class="{ isActive: current_opt =='10'}" @click="getList('10')"> 专辑 </li>
+        <li class="search-menu-item" :class="{ isActive: current_opt =='100'}" @click="getList('100')"> 歌手 </li>
+        <li class="search-menu-item" :class="{ isActive: current_opt =='1000'}" @click="getList('1000')"> 歌单 </li>
+        <li class="search-menu-item" :class="{ isActive: current_opt =='1002'}" @click="getList('1002')"> 用户 </li>
+        <li class="search-menu-item" :class="{ isActive: current_opt =='1004'}" @click="getList('1004')"> MV </li>
+    </ul>
+    <!-- <songs v-if="current_opt=='1'"/> -->
+    <!-- <ul class="new_list">
+        <li class="new_item" v-for="item in 10" :key="item">
+            <div class="index">1</div>
+            <img src="../assets/img/login.jpg" alt="newMusic">
+            <div class="sub-title font-14 mleft-10"> ddd fweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</div>
+            <div class="sub-item font-12" style="color: rgb(103, 103, 103);">ddd</div>
+            <div class="sub-item font-12" style="width: 100px;text-align: center;"> wrwewewe </div>
+        </li>
+    </ul> -->
+    <el-pagination background layout="prev, pager, next" :total="total" :page-size="30" @current-change="changePage" style="margin-bottom:60px"/>
+</div>
+</template>
+
+<script setup>
+import songs from "./songListDetail/songs.vue";
+import { getSearchList } from '../api/list';
+import {ref,reactive,provide} from 'vue';
+import {useRoute} from 'vue-router';
+const route= useRoute();
+let current_opt=ref('0');
+let songList = reactive({tracks:[]});
+provide('songsDetails', songList);
+let total= ref(0);
+function changePage(p){
+    getList(current_opt.value,p-1,false);
+}
+async function getList(type,page=0,isPage=true){
+    if (current_opt.value==type&&isPage)
+    return;
+    current_opt.value = type
+    const res = await getSearchList(route.query.keywords, current_opt.value,page*30);
+    if(current_opt.value=='1')
+    {
+        songList.tracks=[...res.data.result.songs];
+        total.value = res.data.result.songCount;
+    }
+}
+getList('1');
+</script>
+
+<style scoped>
+.new_item {
+    display: flex;
+    height: 90px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.new_item:hover {
+    background-color: #f2f2f2;
+}
+
+.new_item img {
+    height: 60px;
+    width: 60px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.index {
+    width: 50px;
+    text-align: center;
+    color: #cfcfdf;
+}
+
+.sub-title {
+    min-width: 100px;
+    flex: 1;
+}
+
+.sub-item {
+    width: 150px;
+    color: #c3c3c4;
+}
+.search_list{
+    width: 80%;
+    margin:0 auto;
+    margin-top:20px;
+}
+.search-menu{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 20px 0;
+}
+.search-menu-item{
+    width: 40px;
+    margin-right: 20px;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+}
+.isActive{
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 5px solid red;
+}
+</style>

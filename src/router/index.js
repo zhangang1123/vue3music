@@ -58,6 +58,16 @@ const routes = [
             name:'recentlyPlay',
             path: '/recentlyPlay',
             component:()=>import('../views/recentlyPlay.vue'),
+          },
+          {
+            name:'dailyRecommend',
+            path: '/dailyRecommend',
+            component:()=>import('../views/dailyRecommend.vue'),
+          },
+          {
+            name:'searchList',
+            path: '/searchList',
+            component:()=>import('../views/searchList.vue'),
           }
         ]
       }

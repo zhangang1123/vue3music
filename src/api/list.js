@@ -58,3 +58,27 @@ export function getComments(id,limit,offset){
         }
     })
 }
+export function recommendSongs(){
+    return request({
+        url:'/recommend/songs',
+        method: 'GET',
+    })
+}
+export function searchHot(){
+    return request({
+        url:'/search/hot/detail',
+        method: 'GET',
+    })
+}
+export function getSearchList( keywords,type,offset=0,limit=30){
+    return request({
+        url:'/cloudsearch',
+        method: 'GET',
+        params: {
+            limit,
+            offset,
+            type,
+            keywords,
+        }
+    })
+}

@@ -9,15 +9,17 @@
     <el-menu-item index="3" :disabled="!store.state.isLogin">
         私人FM
     </el-menu-item>
-    <el-menu-item index="4" :disabled="!store.state.isLogin">
-        每日推荐
-    </el-menu-item>
-    <el-menu-item index="recentlyPlay" :route="{ name:'recentlyPlay'}">
-        最近播放
-    </el-menu-item>
-    <el-menu-item index="6" :disabled="!store.state.isLogin">
-        我的收藏
-    </el-menu-item>
+    <el-menu-item-group title="我的音乐">
+        <el-menu-item index="dailyRecommend" :disabled="!store.state.isLogin" :route="{ name:'dailyRecommend'}">
+            每日推荐
+        </el-menu-item>
+        <el-menu-item index="recentlyPlay" :route="{ name:'recentlyPlay'}">
+            最近播放
+        </el-menu-item>
+        <el-menu-item index="6" :disabled="!store.state.isLogin">
+            我的收藏
+        </el-menu-item>
+    </el-menu-item-group>
 </el-menu>
 </template>
 

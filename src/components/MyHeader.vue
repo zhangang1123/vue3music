@@ -11,8 +11,8 @@
             <i class="iconfont icon-arrow-right"></i>
         </button>
     </div>
-    <div class="search-box">
-        <el-input v-model="input" 
+    <div class="search-box" @keydown.enter="searchSong()">
+        <el-input v-model="keywords" 
         @blur="isblur=false"
         @focus="isblur=true"
         class="w-50 m-2" placeholder="输入你喜欢的音乐" :suffix-icon="Search" />
@@ -33,21 +33,26 @@
 
 <script setup>
 import suggestion from "./suggestion.vue"
-import { Search } from '@element-plus/icons-vue'
-import { UserFilled } from '@element-plus/icons-vue'
+import { Search, UserFilled } from '@element-plus/icons-vue'
 import { logOut } from '../api/login'
 import { ref, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from "vuex";
 let isblur=ref(false)
-let input=ref('');
+let keywords=ref('');
 let dialogVisible=ref(false);
 let router=useRouter();
 let store=useStore();
 function goLogin()
 {
-    router.push({name: 'login'});
+    router.push({ name: 'login'});
 }
+function searchSong(){
+    if (keywords.value == '')
+        return;
+    router.push({ name: 'searchList', query: { keywords: keywords.value } });
+    keywords.value='';
+} 
 function logout(){
     if(store.state.isLogin){
         ElMessageBox.confirm('你想要退出登录吗？?')

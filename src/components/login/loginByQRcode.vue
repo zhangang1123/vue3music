@@ -18,7 +18,6 @@ let key;
 let imgData=ref('');
 let status=ref('');
 let time;
-let userInfo;
 const store=useStore();
 const router=useRouter();
 async function getKey(){
@@ -53,11 +52,9 @@ async function checkQrcode(key){
     else if (res.data.code == 802) {
         status.value = res.data.message;
         console.log(res.data);
-        userInfo = { nickname: res.data.nickname, avatar: res.data.avatarUrl }
     }
     else if (res.data.code == 803) {
         status.value = res.data.message;
-        store.commit('changeState',userInfo);
         router.replace({ name: 'center' });
     }
 }

@@ -2,15 +2,15 @@
 <div class="suggestion">
     <div class="title">热搜榜</div>
     <ul class="hot-list">
-        <li class="hot-item">
-            <div class="item-index">1</div>
+        <li class="hot-item" v-for="(item,index) in suggestionList" :key="index">
+            <div class="item-index"  :style="{color:index<3?'red':'rgb(153, 153, 153)'}">{{index+1}}</div>
             <div class="item-info">
                 <div style="margin-top:8px;">
-                    <span class="font-12 item-key">林俊杰</span>
-                    <span class="font-12 mleft-10" style="color: rgb(194, 193, 193);">20417</span>
+                    <span class="font-12 item-key">{{ item.searchWord }}</span>
+                    <span class="font-12 mleft-10" style="color: rgb(194, 193, 193);">{{ item.score }}</span>
                 </div>
                 <div>
-                    <span class="font-12" style="color: rgb(153, 153, 153);">看看行走的CD机又发什么新歌啦~</span>
+                    <span class="font-12" style="color: rgb(153, 153, 153);">{{ item.content }}</span>
                 </div>
             </div>
         </li>
@@ -18,10 +18,13 @@
 </div>
 </template>
 
-<script>
-export default {
-
-}
+<script setup>
+import { searchHot } from '../api/list';
+import {ref} from 'vue';
+let suggestionList=ref([]);
+searchHot().then(res=>{
+    suggestionList.value=res.data.data;
+})
 </script>
 
 <style>
@@ -42,6 +45,7 @@ export default {
     width: 100%;
     height: 50px;
     display: flex;
+    cursor: pointer;
 }
 
 .hot-item:hover {
