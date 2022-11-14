@@ -36,3 +36,21 @@ export function checkQr(key){
         }
     })
 }
+export function logOut(){
+    return request({
+        url:'/logout',
+        method: 'GET',
+        params: {
+            timestamp:Date.now(),
+        }
+    })
+}
+export function loginStatus(){
+    return request({
+        url:'/login/status',
+        method: 'GET',
+        // params: {
+
+        // }
+    })
+}

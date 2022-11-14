@@ -3,7 +3,7 @@
     <div class="new_header">
         <div class="btn_group">
             <button class="new_btn" :class="{ current_btn: currentState }" @click="currentState=true">新歌速递</button>
-            <button class="new_btn" :class="{ current_btn: !currentState }" @click="getalbum()">新碟上架</button>
+            <button class="new_btn" :class="{ current_btn: !currentState }" @click="currentState = false">新碟上架</button>
         </div>
     </div>
     <div class="newMusic" v-if="currentState">
@@ -86,9 +86,6 @@ async function changeArea(a) {
     gujia.value= false;
 }
 async function getalbum(){
-    if (currentState.value==false)
-        return;
-    currentState.value = false
     const res = await getNewalbum();
     Albums.value=res.data.weekData;
 }

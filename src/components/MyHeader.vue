@@ -21,7 +21,7 @@
     <div 
     @click="goLogin()"
     class="avatar-wrap mleft-12 pointer div-type" >
-                <el-avatar :icon="UserFilled" :size="30"  :src="store.state.userInfo.avatar"/>
+                <el-avatar :icon="UserFilled" :size="30"  :src="store.state.userInfo.avatarUrl"/>
     </div>
     <div 
     @click="logout()"
@@ -35,6 +35,7 @@
 import suggestion from "./suggestion.vue"
 import { Search } from '@element-plus/icons-vue'
 import { UserFilled } from '@element-plus/icons-vue'
+import { logOut } from '../api/login'
 import { ref, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from "vuex";
@@ -52,10 +53,18 @@ function logout(){
         ElMessageBox.confirm('你想要退出登录吗？?')
             .then(() => {
                 localStorage.clear();
-                router.push({ name: 'login' });
-            })
-            .catch(() => {
-                // catch error
+                logOut().then((res) => {
+                    if (res.data.code == 200) {
+                        ElMessage({
+                            message: '退出登录成功',
+                            type: 'success',
+                        })
+                    }
+                })
+                store.state.isLogin=false;
+                store.state.userInfo ={};
+            }).catch(err=>{
+
             })
     }
 }

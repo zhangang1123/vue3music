@@ -79,6 +79,7 @@ function songList_view(id){
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 50px;
 }
 .recommandItem{
     position: relative;

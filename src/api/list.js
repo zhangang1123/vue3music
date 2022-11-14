@@ -47,3 +47,14 @@ export function getNewalbum(limit,offset=0){
         }
     })
 }
+export function getComments(id,limit,offset){
+    return request({
+        url:'/comment/playlist',
+        method: 'GET',
+        params: {id,
+            limit,
+            offset,
+            timestamp:Date.now(),
+        }
+    })
+}

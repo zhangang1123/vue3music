@@ -45,7 +45,7 @@
   </div>
     <ul class="routeList">
         <li class="routeItem" @click="changeRoute('songs')" :class="{ actived: currentPage =='songs'}">歌曲列表</li>
-        <li class="routeItem" @click="changeRoute('comment')" :class="{ actived: currentPage =='comment'}">评论(400)</li>
+        <li class="routeItem" @click="changeRoute('comment')" :class="{ actived: currentPage =='comment'}">评论({{ songsDetails.commentCount }})</li>
         <li class="routeItem" @click="changeRoute('收藏')" :class="{ actived: currentPage =='收藏'}">收藏</li>
     </ul>
     <component :is="currentOpt[currentPage]"></component>
@@ -59,8 +59,8 @@ import comment from './songListDetail/comment.vue'
 import { useRoute } from 'vue-router';
 import { playlistDetail } from '../api/playlist';
 import {useTimestamps } from '../hooks/timestamp';
-import { watch, ref,provide} from 'vue';
-let currentOpt=ref({songs,comment,})
+import { watch, reactive, ref,provide} from 'vue';
+let currentOpt={songs,comment,};
 const route=useRoute();
 let showIntroduce=ref(false);
 let currentPage = ref('songs');
@@ -72,7 +72,6 @@ function changeRoute(to)
 }
 async function songlistDetail(id){
     const res=await playlistDetail(id);
-    console.log(res.data.playlist.tracks);
     songsDetails .value=res.data.playlist
 }
 songlistDetail(route.query.id)
