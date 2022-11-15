@@ -1,7 +1,7 @@
 <template>
 <div class="player">
     <div class="player-left">
-        <img :src="songInfo.cover??'../'" alt="songCover">
+        <img :src="songInfo.cover" alt="songCover" @click="showDetails()">
         <div class="musicInfo">
             <div style="font-size: 14px">{{ songInfo.name}}</div>
             <div style="font-size: 12px">{{ songInfo.ar}}</div>
@@ -67,22 +67,54 @@
                 <el-table-column prop="dt" :formatter="formatTime" label="时长" />
             </el-table>
         </el-drawer>
+        <el-drawer :append-to-body="true" v-model="showSongDetails" direction="btt" size="100%" :show-close="false" :with-header="false">
+            <header id="el-drawer__title" class="el-drawer__header">
+                <div @click="showDetails"><el-icon><ArrowDown /></el-icon></div>
+            </header>
+                <div class="play-view">
+                    <div style="font-size:30px;text-align: center;">{{ songInfo.name}}</div>
+                    <div style="text-align: center;">{{ songInfo.ar}}</div>
+                    <div style="display: flex;">
+                        <div class="song_img">
+                            <div class="play" @click="changePlaying" :class="{ isPlay: store.state.isPlay }">
+                                <img src="../assets/img/play.png" alt="player">
+                            </div>
+                            <div class="changpian">
+                                <div class="changpian-wrap" @click="changePlaying">
+                                    <img :src="songInfo.cover">
+                                </div>
+                            </div>
+                        </div>
+                        <lyricwrap />
+                    </div>
+                </div>
+                <comment type="music" style="width:75%;margin:0 auto;"/>
+        </el-drawer>
     </div>
     <audio ref="audio" loop :src="songInfo.url" autoplay="autoplay"></audio>
 </div>
 </template>
 
 <script setup>
-import { Download } from '@element-plus/icons-vue';
+import comment from '../views/songListDetail/comment.vue';
+import lyricwrap from './lyricwrap.vue'
+import { Download, ArrowDown } from '@element-plus/icons-vue';
 import {useStore} from 'vuex';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { getSongDetails } from "../api/playlist"; 
-import { isArray } from 'lodash';
 let time;
 const store = useStore();
 let showList=ref(false);
+let showSongDetails=ref(false);
 let audio=ref(null);
-let currentTime=ref(0);
+let currentTime=computed({
+    get(){
+        return store.state.currentTime;
+    },
+    set(val){
+        store.state.currentTime=val;
+    }
+});
 let currentVolume=ref(100);
 let songInfo=computed(()=>{
     if (!store.state.songPlaying)
@@ -117,6 +149,11 @@ let currentPos=computed({
         audio.value.currentTime = (val * audio.value.duration)/100
     }
 })
+function showDetails(){
+    if (!store.state.songPlaying)
+        return;
+    showSongDetails.value = !showSongDetails.value;
+}
 function changePlaying()
 {
     store.state.isPlay ? audio.value.pause() : audio.value.play();
@@ -183,22 +220,14 @@ async function playSong(row){
     }
     store.dispatch('changeSong', { id: row.id, songInfo });
 }
+
 </script>
 
 <style>
+
 .timeSlider {
     width: 460px;
     margin: 0 10px;
-}
-.el-slider__bar {
-    background-color: #ec4141;
-    height: 3px;
-}
-.el-slider__button {
-    border: 0;
-    width: 9px;
-    height: 9px;
-    background-color: #e13e3e;
 }
 .process-bar{
     display: flex;
@@ -303,5 +332,65 @@ async function playSong(row){
 .volume:hover .volume-slider {
   display: block;
 }
+.el-slider__bar {
+    background-color: #ec4141;
+    height: 3px;
+}
+.el-slider__button {
+    border: 0;
+    width: 9px;
+    height: 9px;
+    background-color: #e13e3e;
+}
+.song_img {
+    margin-top: 10px;
+    position: relative;
+}
 
+.play {
+    position: absolute;
+    top: -30px;
+    left: 130px;
+    width: 120px;
+    transform-origin: 3px 3px;
+    transition: all 0.5s;
+    z-index: 20;
+}
+.isPlay{
+    transform: rotate(30deg);
+}
+
+.play-view {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20%;
+}
+
+.changpian {
+    margin-top: 40px;
+    margin-right: 0;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background-color: #c4c3c6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.changpian-wrap {
+    width: 240px;
+    height: 240px;
+    background-color: #1a1c1e;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.changpian-wrap img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+}
 </style>

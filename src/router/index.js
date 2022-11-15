@@ -68,6 +68,11 @@ const routes = [
             name:'searchList',
             path: '/searchList',
             component:()=>import('../views/searchList.vue'),
+          },
+          {
+            name:'personalFM',
+            path: '/personalFM',
+            component:()=>import('../views/personalFM.vue'),
           }
         ]
       }

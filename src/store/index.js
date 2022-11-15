@@ -8,6 +8,7 @@ export default createStore({
     playlist:[],
     songPlaying:null,
     historylist:JSON.parse(sessionStorage.getItem('historylist'))||[],
+    currentTime:0,
   },
   mutations: {
     changeState(state,Info){

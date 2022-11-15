@@ -82,3 +82,35 @@ export function getSearchList( keywords,type,offset=0,limit=30){
         }
     })
 }
+export function getMusicComment(id,limit=20,offset=0){
+    return request({
+        url:'/comment/music',
+        method: 'GET',
+        params: {
+            id,
+            limit,
+            offset,
+            timestamp:Date.now(),
+        }
+    })
+}
+//获取歌词
+export function getlyric(id){
+    return request({
+        url:'/lyric',
+        method: 'GET',
+        params: {
+            id,
+        }
+    })
+}
+//获取私人FM
+export function getPersonal(){
+    return request({
+        url:'/personal_fm',
+        method: 'GET',
+        params: {
+            timestamp:Date.now(),
+        }
+    })
+}

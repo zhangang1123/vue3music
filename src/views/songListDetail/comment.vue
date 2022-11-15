@@ -9,12 +9,12 @@
             <button class="char no-btn" @click="context+='@'"> @ </button>
             <button class="char no-btn" @click="context+='#输入你想说的话题#'">#</button></div>
         <div class="send-btn">
-            <button class="btn btn-white" v-login>评论</button>
+            <button class="btn btn-white" v-login @click="sendComment()">评论</button>
         </div>
     </div>
     <div class="hot_comment">
         <div class="font-16 font-bold">最新评论({{ total }})</div>
-        <div class="comment_item" v-for="item in comments" :key="item.commentId">
+        <div class="comment_item" v-for="(item,index) in comments" :key="item.commentId">
             <div class="comment_main">
                 <div class="img-wrap">
                     <img class="img circle pointer" :src="item.user.avatarUrl">
@@ -31,7 +31,7 @@
                     <div class="comment_Info">
                         <div class="time font-12" style="color: rgb(159, 159, 159);"> {{ item.timeStr }} </div>
                         <div class="comment-btn">
-                            <button class="no-btn" v-login>
+                            <button class="no-btn" v-login @click="giveLike(item,index)">
                                 <i class="iconfont icon-good" :style="{ color: item.liked&&'red' }"></i>
                                 <span > {{ item.likedCount }}</span>
                             </button>
@@ -40,7 +40,7 @@
                                 <i class="iconfont icon-fenxiang"></i>
                             </button>
                             <div  class="div-column"></div>
-                            <button  class="no-btn" v-login>
+                            <button  class="no-btn" v-login @click="replyComment(item)">
                                 <i class="iconfont icon-pinglun"></i>
                             </button>
                         </div>
@@ -55,22 +55,117 @@
 </template>
 
 <script setup>
-import { getComments } from '../../api/list';
-import { inject ,onMounted,ref } from 'vue';
-const songsDetails = inject('songsDetails');
-let context=ref('');
-let total=ref(0);
+import { getComments, getMusicComment } from '../../api/list';
+import { addComment, likeComment } from '../../api/handle.js';
+import { inject, onMounted, ref, watch } from 'vue';
+import {useStore} from 'vuex';
+let songsDetails
+let store= useStore();
+let context = ref('');
+let total = ref(0);
 let comments = ref([]);
-onMounted(async ()=>{
-    const res = await getComments(songsDetails.value.id, 30, 0);
-    total.value = res.data.total;
-    comments.value = res.data.comments;
+let replyObj=ref({});
+let prop=defineProps({
+    type:{
+        type:String,
+        default() {
+            return 'playlist'
+        }
+    }, 
+    songId:{},
 })
+if(prop.type=='playlist')
+{
+    songsDetails = inject('songsDetails');
+}else if(prop.type=='FM')
+{
+    watch(() =>prop.songId,()=>{
+        init();
+    })
+}
 async function nextPages(val)
 {
-    const res = await getComments(songsDetails.value.id, 30, (val-1)*30);
+    let res;
+    if (prop.type == 'playlist') {
+        res = await getComments(songsDetails.value.id, 30, (val-1)*30);
+    } else if (prop.type == 'music') {
+        res = await getMusicComment(store.state.songPlaying.id ,30, (val - 1) * 30);
+    } else if (prop.type == 'FM') {
+        res = await getMusicComment(prop.songId,30, (val - 1) * 30);
+    }
     comments.value = res.data.comments;
 }
+async function init(){
+    let res;
+    if (prop.type == 'playlist') {
+        res = await getComments(songsDetails.value.id, 30, 0);
+    } else if (prop.type == 'music') {
+        res = await getMusicComment(store.state.songPlaying.id);
+    } else if (prop.type == 'FM') {
+        res = await getMusicComment(prop.songId);
+    }
+    total.value = res.data.total;
+    comments.value = res.data.comments;
+}
+async function sendComment(){
+    let type=0,id;
+    if(prop.type == 'playlist') {
+        type=2;
+        id = songsDetails.value.id;
+    }else if(prop.type == 'music'){
+        type=0;
+        id = store.state.songPlaying.id;
+    }else if(prop.type == 'FM'){
+        type = 0;
+        id = prop.songId;
+    } 
+    if (context.value.slice(0, 2) == '回复' && replyObj.value.user)
+    {
+        let len =replyObj.value.user.nickname.length;
+        let content=context.value.slice(len+3);
+        const res = await addComment(2, type, id, content, replyObj.value.commentId);
+        let temp = res.data.comment;
+        temp.beReplied = [replyObj.value];
+        comments.value.unshift(temp);
+        ElMessage({
+            message: '评论成功',
+            type: 'success',
+        });
+        context.value='';
+    }
+    else{
+        const res = await addComment(1, type, id, context.value);
+        if (res.data.code == 200) {
+            ElMessage({
+                message: '评论成功',
+                type: 'success',
+            });
+            comments.value.unshift(res.data.comment);
+            context.value = '';
+        }
+    }
+}
+async function giveLike(item,index){
+    let type,t=0,id;
+    item.isliked?t=0:t=1;
+    if (prop.type == 'playlist')
+    {
+        id = songsDetails.value.id;
+        type=2;
+    }
+    const res = await likeComment(id,item.commentId,t,type);
+    if(res.data.code==200)
+    {
+        comments.value[index].isliked = !comments.value[index].isliked;
+    }
+}
+async function replyComment(item){
+    context.value=`回复${item.user.nickname}：`;
+    replyObj.value = item;
+}
+onMounted(()=>{
+    init();
+})
 </script>
 
 <style scoped>

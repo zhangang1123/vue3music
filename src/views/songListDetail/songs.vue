@@ -24,9 +24,11 @@
 <script setup>
 import {inject} from 'vue';
 import {useStore} from 'vuex';
-import { getSongDetails } from '../../api/playlist'
+import { getSongDetails } from '../../api/playlist';
+import { likeSong } from '../../api/handle';
 const store = useStore();
 let songsDetails = inject('songsDetails');
+console.log(songsDetails);
 function formatTime(row) {
     let date = new Date(row.dt)
     let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
@@ -40,6 +42,10 @@ async function playSong(row) {
     store.dispatch('changeSong',{id:row.id,songInfo});
     store.commit('changePlaylist', songsDetails);
 }
+// async function givelike(){
+//     const res = await likeSong();
+//     console.log(res.data); 
+// }
 </script>
 
 <style scoped>

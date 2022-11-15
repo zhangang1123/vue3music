@@ -19,7 +19,6 @@ async function getloginState() {
         store.state.userInfo = {};
         localStorage.clear();
     }
-    console.log(status.data.data);
 }
 getloginState();
 </script>
