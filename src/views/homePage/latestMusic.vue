@@ -6,7 +6,7 @@
             <button class="new_btn" :class="{ current_btn: !currentState }" @click="currentState = false">新碟上架</button>
         </div>
     </div>
-    <div class="newMusic" v-if="currentState">
+    <div class="newMusic" v-show="currentState">
         <div class="kinds">
             <div class="areas">
                 <button class="no-btn mright-10 font-16" :class="{ fontWeight: currentArea == 0}" @click="changeArea(0)"> 全部 </button>
@@ -41,8 +41,8 @@
             </li>
         </ul>
     </div>
-    <ul class="recommandList" v-else>
-        <li class="recommandItem" v-for="item in Albums" :key="item.id">
+    <ul class="recommandList" v-show="!currentState">
+        <li class="recommandItem" v-for="item in Albums" :key="item.id" @click="album_view()">
             <img :src="item.picUrl" alt="歌单封面">
             <div class="songList_info">{{item.name}}</div>
             <div class="play-btn"><i class="iconfont icon-bofang" style="line-height:32px"></i></div>
@@ -57,7 +57,9 @@ import { getSongDetails } from "../../api/playlist";
 import { getNewSong, getNewalbum } from '../../api/list';
 import {ref,onMounted} from 'vue';
 import {useStore} from 'vuex';
+import { useRouter } from 'vue-router';
 const store = useStore();
+const router = useRouter();
 let currentState=ref(true);
 let newSongList=ref([]);
 let gujia=ref(true);
@@ -69,6 +71,9 @@ onMounted(async ()=>{
     gujia.value=false;
     getalbum();
 })
+function album_view(){
+    router.push({name: "albumDetail"});
+}
 function formatTime(dt) {
     let date = new Date(dt)
     let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';

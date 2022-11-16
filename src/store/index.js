@@ -9,6 +9,7 @@ export default createStore({
     songPlaying:null,
     historylist:JSON.parse(sessionStorage.getItem('historylist'))||[],
     currentTime:0,
+    likeList:[],
   },
   mutations: {
     changeState(state,Info){

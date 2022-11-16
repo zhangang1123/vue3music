@@ -20,7 +20,7 @@
         </div>
         <el-row class="mb-4">
             <el-button type="danger" :icon="VideoPlay" round>播放全部</el-button>
-            <el-button class="none" :icon="FolderChecked"   round>收藏({{ Math.floor(songsDetails.subscribedCount/10000) }}万)</el-button>
+            <el-button class="none" :icon="songsDetails.subscribed ? FolderChecked : FolderAdd" round @click="collectHandle()">收藏({{ Math.floor(songsDetails.subscribedCount/10000) }}万)</el-button>
             <el-button class="none" :icon="Share"  round>分享({{ songsDetails.shareCount }})</el-button>
             <el-button type="danger" :icon="HotWater"  round>加载完整歌单</el-button>
         </el-row>
@@ -53,11 +53,12 @@
 </template>
 
 <script setup>
-import { VideoPlay, Share, HotWater, FolderChecked, CaretBottom, CaretTop, Timer } from '@element-plus/icons-vue';
+import { VideoPlay, Share, HotWater, FolderChecked, CaretBottom, CaretTop, Timer, FolderAdd } from '@element-plus/icons-vue';
 import songs from './songListDetail/songs.vue';
 import comment from './songListDetail/comment.vue'
 import { useRoute } from 'vue-router';
 import { playlistDetail } from '../api/playlist';
+import { collectSongList } from '../api/handle';
 import {useTimestamps } from '../hooks/timestamp';
 import { watch, reactive, ref,provide} from 'vue';
 let currentOpt={songs,comment,};
@@ -66,15 +67,60 @@ let showIntroduce=ref(false);
 let currentPage = ref('songs');
 let songsDetails = ref({});
 provide('songsDetails', songsDetails);
+function collectHandle(){
+    let t = songsDetails.value.subscribed ? '2' : '1';
+    if (t == '2') {
+        ElMessageBox.confirm(
+            '确认取消收藏这个歌单吗',
+            'Warning',
+            {
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+                type: 'warning',
+            }
+        ).then(() => {
+            collect(t)
+            })
+    }else{
+        collect(t);
+    }
+}
+async function collect(t)
+{
+    let res = await collectSongList(t, songsDetails.value.id);
+    if(res.data.code== 200)
+    {
+        songsDetails.value.subscribed = !songsDetails.value.subscribed;
+        if(t=='1')
+        {
+            ElMessage({
+                type:'success',
+                message:'收藏成功'
+            })
+        }else{
+            ElMessage({
+                type: 'success',
+                message: '取消收藏成功'
+            })
+        }
+    }
+    else
+    ElMessage({
+        type: 'error',
+        message: '未知错误'
+    })
+}
 function changeRoute(to)
 {
     currentPage.value=to;
 }
 async function songlistDetail(id){
     const res=await playlistDetail(id);
-    songsDetails .value=res.data.playlist
+    songsDetails .value=res.data.playlist;
 }
-songlistDetail(route.query.id)
+watch(() => route.query.id,()=>{
+    songlistDetail(route.query.id);
+},{immediate:true})
 </script>
 
 <style scoped>

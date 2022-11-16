@@ -33,8 +33,8 @@
         </div>
     </div>
     <ul class="recommandList">
-        <li class="recommandItem" v-for="singer in singerlist" :key="singer.id">
-            <img :src="singer.img1v1Url" alt="歌单封面">
+        <li class="recommandItem" v-for="singer in singerlist" :key="singer.id" @click="singer_view(singer.id)">
+            <img :src="singer.img1v1Url" alt="歌手封面">
             <div class="songList_info">{{singer.name}}</div>
         </li>
     </ul>
@@ -42,9 +42,10 @@
 </template>
 
 <script setup>
-import { init } from 'events';
 import {reactive,onMounted,ref} from 'vue';
 import { getSingerList } from '../../api/list';
+import {useRouter} from 'vue-router';
+const router = useRouter();
 let allfname=['全部','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#'];
 let currentfilter =reactive({language:'-1',class:'-1',front:'全部'});
 let singerlist=ref([]);
@@ -77,6 +78,9 @@ function changeArea(area){
         return;
     currentfilter.language = area;
     SingerList();
+}
+function singer_view(id){
+    router.push({ name: 'singerDetail',query: { id, }});
 }
 onMounted(async ()=>{
     const res = await getSingerList();

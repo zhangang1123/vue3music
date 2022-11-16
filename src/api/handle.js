@@ -35,11 +35,22 @@ export function likeComment(id,cid,t,type){
 }
 export function likeSong(id,like){
     return request({
-        url:'/like',
+        url:'/like?&',
         method:'POST',
         data:{
             id,
             like,
+            timestamp:Date.now(),
+        }
+    })
+}
+export function collectSongList(t,id){
+    return request({
+        url:'/playlist/subscribe',
+        method: 'POST',
+        data:{
+            t,
+            id,
         }
     })
 }

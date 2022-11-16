@@ -55,6 +55,16 @@ const routes = [
             component:()=>import('../views/songListDetail.vue'),
           },
           {
+            name:'singerDetail',
+            path: '/singerDetail',
+            component:()=>import('../views/singerDetail.vue'),
+          },
+          {
+            name:'albumDetail',
+            path: '/albumDetail',
+            component:()=>import('../views/albumDetail.vue'),
+          },
+          {
             name:'recentlyPlay',
             path: '/recentlyPlay',
             component:()=>import('../views/recentlyPlay.vue'),

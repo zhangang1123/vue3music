@@ -19,6 +19,12 @@
             <div class="sub-item font-12" style="width: 100px;text-align: center;"> by {{ item.creator.nickname }} </div>
         </li>
     </ul>
+    <ul class="new_list" v-else-if="current_opt=='100'">
+        <li class="new_item" v-for="item in singerList" :key="item.id" @click="songList_view(item.id,'singer')">
+            <img :src="item.img1v1Url" alt="newMusic">
+            <div class="sub-title font-14 mleft-10">{{item.name}}</div>
+        </li>
+    </ul>
     <el-pagination background layout="prev, pager, next" :total="total" :page-size="30" @current-change="changePage" style="margin-bottom:60px"/>
 </div>
 </template>
@@ -34,12 +40,16 @@ let current_opt=ref('0');
 let songList = reactive({tracks:[]});
 provide('songsDetails', songList);
 let playList=ref([]);
+let singerList=ref([]);
 let total= ref(0);
 watch(() => route.query.keywords, () => {
     getList('1',0,false);
 },{ immediate: true ,deep: true})
-function songList_view(id) {
-    router.push({ name: 'songListDetail', query: { id, } });
+function songList_view(id,type='songList') {
+    if(type=='songList')
+        router.push({ name: 'songListDetail', query: { id, } });
+    else if(type=='singer')
+        router.push({ name: 'singerDetail', query: { id, } })
 }
 function changePage(p){
     getList(current_opt.value,p-1,false);
@@ -57,6 +67,10 @@ async function getList(type,page=0,isPage=true){
     {
         playList.value = res.data.result.playlists
         total.value = res.data.result.playlistCount;
+    }else if(current_opt.value=='100')
+    {
+        total.value = res.data.result.artistCount;
+        singerList.value= res.data.result.artists;
     }
 }
 </script>

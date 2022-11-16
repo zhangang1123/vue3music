@@ -8,8 +8,8 @@
         <el-table-column label="音乐标题">
             <template #default="scope">
                 <div style="display: flex; align-items: center">
-                    <i v-login class="iconfont icon-aixin"></i>
-                    <i v-show="false" v-login class="iconfont icon-aixin1" style="color: rgb(236, 65, 65);"></i>
+                    <i v-if="store.state.likeList.indexOf(scope.row.id)==-1" v-login class="iconfont icon-aixin" @click.stop="givelike(scope.row.id,true)"></i>
+                    <i v-else v-login class="iconfont icon-aixin1" style="color: rgb(236, 65, 65);" @click.stop="givelike(scope.row.id,false)"></i>
                     <span style="margin-left: 10px">{{ scope.row.name }}</span>
                 </div>
             </template>
@@ -42,10 +42,30 @@ async function playSong(row) {
     store.dispatch('changeSong',{id:row.id,songInfo});
     store.commit('changePlaylist', songsDetails);
 }
-// async function givelike(){
-//     const res = await likeSong();
-//     console.log(res.data); 
-// }
+async function givelike(id,like){
+    console.log(id,like);
+    const res = await likeSong(id,like);
+    if(res.data.code==200)
+    {
+        if (like) {
+            store.state.likeList.push(id);
+            ElMessage({
+                message: '喜欢成功',
+                type: 'success',
+            })
+        } else {
+            store.state.likeList = store.state.likeList.filter(item => {
+                return item != id;
+            })
+            ElMessage({
+                message: '取消喜欢成功',
+                type: 'success',
+            })
+        }
+    }
+    console.log(store.state.likeList);
+    console.log(res.data); 
+}
 </script>
 
 <style scoped>

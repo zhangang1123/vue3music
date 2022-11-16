@@ -114,3 +114,64 @@ export function getPersonal(){
         }
     })
 }
+//喜欢的音乐列表
+export function getLikeList(uid){
+    return request({
+        url:'/likelist',
+        method: 'GET',
+        params: {
+            uid,
+        }
+    })
+}
+//获取用户歌单
+export function getUserList(uid){
+    return request({
+        url:'/user/playlist',
+        method: 'GET',
+        params: {
+            uid,
+        }
+    })
+}
+//获取歌手信息
+export function getSingerIntro(id){
+    return request({
+        url:'/artist/desc',
+        method: 'GET',
+        params: {
+            id,
+        }
+    })
+}
+//获取歌手专辑
+export function getSingerAlbum(id,limit){
+    return request({
+        url:'/artist/album',
+        method: 'GET',
+        params: {
+            id,
+            limit,
+        }
+    })
+}
+//获取歌手top50的歌
+export function getTop(id){
+    return request({
+        url: '/artist/top/song',
+        method: 'GET',
+        params: {
+            id
+        }
+    })
+}
+//获取相似歌手
+export function getSimiSinger(id){
+    return request({
+        url:'/simi/artist',
+        method: 'GET',
+        params: {
+            id
+        }
+    })
+}
