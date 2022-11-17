@@ -10,9 +10,9 @@
                 </div>
             </div>
             <div class="btn_group">
-                <button class="pfm-btn">
-                    <i class="iconfont icon-aixin"></i>
-                    <i class="iconfont icon-aixin1" style="color: red; display: none;"></i>
+                <button class="pfm-btn" v-login>
+                    <i v-if="store.state.likeList.indexOf(songInfo.id)==-1" class="iconfont icon-aixin" @click.stop="givelike(songInfo.id,true)"></i>
+                    <i v-else class="iconfont icon-aixin1" style="color: red;" @click.stop="givelike(songInfo.id,false)"></i>
                 </button>
                 <el-popconfirm title="确定将当前音乐移到垃圾桶吗？" @confirm="deleteFromFM()">
                     <template #reference>
@@ -48,7 +48,7 @@ import comment from './songListDetail/comment.vue';
 import { Delete, CaretRight, MoreFilled } from '@element-plus/icons-vue';
 import { getPersonal } from '../api/list';
 import { getSongDetails } from '../api/playlist';
-import { deletefromFM } from '../api/handle.js'
+import { deletefromFM, likeSong } from '../api/handle.js'
 import {useRoute} from 'vue-router';
 import {useStore} from 'vuex';
 import { ref, computed } from 'vue';
@@ -85,6 +85,27 @@ async function deleteFromFM(){
             getFM();
         }
     })
+}
+async function givelike(id, like) {
+    console.log(id, like);
+    const res = await likeSong(id, like);
+    if (res.data.code == 200) {
+        if (like) {
+            store.state.likeList.push(id);
+            ElMessage({
+                message: '喜欢成功',
+                type: 'success',
+            })
+        } else {
+            store.state.likeList = store.state.likeList.filter(item => {
+                return item != id;
+            })
+            ElMessage({
+                message: '取消喜欢成功',
+                type: 'success',
+            })
+        }
+    }
 }
 </script>
 

@@ -16,7 +16,7 @@
         <el-menu-item index="recentlyPlay" @click="changeRoute('recentlyPlay')">
             最近播放
         </el-menu-item>
-        <el-menu-item index="shoucang" :disabled="!store.state.isLogin">
+        <el-menu-item index="myCollect" :disabled="!store.state.isLogin" @click="changeRoute('myCollect')">
             我的收藏
         </el-menu-item>
     </el-menu-item-group>

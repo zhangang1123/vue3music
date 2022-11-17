@@ -14,7 +14,7 @@
     </div>
     <div class="hot_comment">
         <div class="font-16 font-bold">最新评论({{ total }})</div>
-        <div class="comment_item" v-for="(item,index) in comments" :key="item.commentId">
+        <div class="comment_item" v-for="item in comments" :key="item.commentId">
             <div class="comment_main">
                 <div class="img-wrap">
                     <img class="img circle pointer" :src="item.user.avatarUrl">
@@ -31,8 +31,8 @@
                     <div class="comment_Info">
                         <div class="time font-12" style="color: rgb(159, 159, 159);"> {{ item.timeStr }} </div>
                         <div class="comment-btn">
-                            <button class="no-btn" v-login @click="giveLike(item,index)">
-                                <i class="iconfont icon-good" :style="{ color: item.liked&&'red' }"></i>
+                            <button class="no-btn" v-login @click="giveLike(item)">
+                                <i class="iconfont icon-good" :class="{ isliked: item.liked }"></i>
                                 <span > {{ item.likedCount }}</span>
                             </button>
                             <div  class="div-column"></div>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { getComments, getMusicComment } from '../../api/list';
+import { getComments, getMusicComment, getALbumComment } from '../../api/list';
 import { addComment, likeComment } from '../../api/handle.js';
 import { inject, onMounted, ref, watch } from 'vue';
 import {useStore} from 'vuex';
@@ -73,6 +73,7 @@ let prop=defineProps({
         }
     }, 
     songId:{},
+    albumId:{},
 })
 if(prop.type=='playlist')
 {
@@ -92,6 +93,8 @@ async function nextPages(val)
         res = await getMusicComment(store.state.songPlaying.id ,30, (val - 1) * 30);
     } else if (prop.type == 'FM') {
         res = await getMusicComment(prop.songId,30, (val - 1) * 30);
+    } else if (prop.type == 'album') {
+        res = await getALbumComment(prop.albumId, 30, (val - 1) * 30);
     }
     comments.value = res.data.comments;
 }
@@ -103,6 +106,9 @@ async function init(){
         res = await getMusicComment(store.state.songPlaying.id);
     } else if (prop.type == 'FM') {
         res = await getMusicComment(prop.songId);
+    }else if (prop.type == 'album')
+    {
+        res = await getALbumComment(prop.albumId,30);
     }
     total.value = res.data.total;
     comments.value = res.data.comments;
@@ -145,18 +151,31 @@ async function sendComment(){
         }
     }
 }
-async function giveLike(item,index){
+async function giveLike(item){
     let type,t=0,id;
-    item.isliked?t=0:t=1;
+    item.liked?t=0:t=1;
     if (prop.type == 'playlist')
     {
         id = songsDetails.value.id;
         type=2;
+    }else if (prop.type == 'music')
+    {
+        id = store.state.songPlaying.id;
+        type=0;
+    }else if (prop.type == 'FM')
+    {
+        id=prop.songId;
+        type=0;
+    }else if (prop.type == 'album')
+    {
+        id=prop.albumId;
+        type=3;
     }
     const res = await likeComment(id,item.commentId,t,type);
     if(res.data.code==200)
     {
-        comments.value[index].isliked = !comments.value[index].isliked;
+        item.liked=!item.liked;
+        item.liked ? item.likedCount++ : item.likedCount--;
     }
 }
 async function replyComment(item){
@@ -169,6 +188,9 @@ onMounted(()=>{
 </script>
 
 <style scoped>
+.isliked{
+    color: red;
+}
 .line{
     border-top: 1px solid #e0e0e0;
 }

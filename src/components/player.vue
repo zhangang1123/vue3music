@@ -22,9 +22,9 @@
             <button class="player-bar-btn" @click="changeSong(true)" :disabled="!store.state.songPlaying">
                 <i class="iconfont icon-xiayishou"></i>
             </button>
-            <button class="player-bar-btn" v-login>
-                <i class="iconfont icon-aixin"></i>
-                <!-- <i v-show="isLiked" style="color: #ec4141" class="iconfont icon-aixin1"></i> -->
+            <button class="player-bar-btn" v-login :disabled="!store.state.songPlaying">
+                <i v-if="store.state.likeList.indexOf(songInfo.id)==-1" class="iconfont icon-aixin" @click.stop="givelike(songInfo.id,true)"></i>
+                <i v-else style="color: #ec4141" class="iconfont icon-aixin1" @click.stop="givelike(songInfo.id,false)"></i>
             </button>
         </div>
         <div class="process-bar">
@@ -102,6 +102,7 @@ import { Download, ArrowDown } from '@element-plus/icons-vue';
 import {useStore} from 'vuex';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { getSongDetails } from "../api/playlist"; 
+import { likeSong } from '../api/handle';
 let time;
 const store = useStore();
 let showList=ref(false);
@@ -220,7 +221,27 @@ async function playSong(row){
     }
     store.dispatch('changeSong', { id: row.id, songInfo });
 }
-
+async function givelike(id, like) {
+    console.log(id, like);
+    const res = await likeSong(id, like);
+    if (res.data.code == 200) {
+        if (like) {
+            store.state.likeList.push(id);
+            ElMessage({
+                message: '喜欢成功',
+                type: 'success',
+            })
+        } else {
+            store.state.likeList = store.state.likeList.filter(item => {
+                return item != id;
+            })
+            ElMessage({
+                message: '取消喜欢成功',
+                type: 'success',
+            })
+        }
+    }
+}
 </script>
 
 <style>

@@ -70,6 +70,11 @@ const routes = [
             component:()=>import('../views/recentlyPlay.vue'),
           },
           {
+            name:'myCollect',
+            path: '/myCollect',
+            component:()=>import('../views/myCollect.vue'),
+          },
+          {
             name:'dailyRecommend',
             path: '/dailyRecommend',
             component:()=>import('../views/dailyRecommend.vue'),
@@ -99,5 +104,16 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
-
+router.beforeEach((to, from, next) => {
+  let isLogin=JSON.parse(localStorage.getItem('isLogin'));
+  if(to.name=='myCollect'||to.name=='dailyRecommend'||to.name=='personalFM')
+  {
+        if(isLogin)
+        {
+          next();
+        }
+  }else{
+          next();
+    }
+})
 export default router

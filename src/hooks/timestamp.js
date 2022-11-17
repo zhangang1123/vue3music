@@ -1,5 +1,5 @@
 
-export function  useTimestamps(timestamp,percentage) {
+export function  useTimestamps(timestamp) {
     timestamp = timestamp ? timestamp : null;
     let date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
     let Y = date.getFullYear() + '-';

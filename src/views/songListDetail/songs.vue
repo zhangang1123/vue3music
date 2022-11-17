@@ -63,8 +63,6 @@ async function givelike(id,like){
             })
         }
     }
-    console.log(store.state.likeList);
-    console.log(res.data); 
 }
 </script>
 

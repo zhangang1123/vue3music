@@ -42,7 +42,7 @@
         </ul>
     </div>
     <ul class="recommandList" v-show="!currentState">
-        <li class="recommandItem" v-for="item in Albums" :key="item.id" @click="album_view()">
+        <li class="recommandItem" v-for="item in Albums" :key="item.id" @click="album_view(item.id)">
             <img :src="item.picUrl" alt="歌单封面">
             <div class="songList_info">{{item.name}}</div>
             <div class="play-btn"><i class="iconfont icon-bofang" style="line-height:32px"></i></div>
@@ -71,8 +71,8 @@ onMounted(async ()=>{
     gujia.value=false;
     getalbum();
 })
-function album_view(){
-    router.push({name: "albumDetail"});
+function album_view(id){
+    router.push({ name: "albumDetail", query: { id, } });
 }
 function formatTime(dt) {
     let date = new Date(dt)
@@ -91,7 +91,7 @@ async function changeArea(a) {
     gujia.value= false;
 }
 async function getalbum(){
-    const res = await getNewalbum();
+    const res = await getNewalbum(20);
     Albums.value=res.data.weekData;
 }
 async function playSong(song) {

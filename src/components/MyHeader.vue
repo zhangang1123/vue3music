@@ -1,6 +1,6 @@
 <template>
 <div class="header-bar"  @mouseleave="isblur=false">
-    <div class="logo-wrap pointer" >
+    <div class="logo-wrap pointer" @click="toHome()">
         <i class="iconfont icon-logView"></i>
     </div>
     <div class="btn-history">
@@ -44,7 +44,14 @@ let router=useRouter();
 let store=useStore();
 function goLogin()
 {
+    if(store.state.isLogin)
+    {
+        return;
+    }
     router.push({ name: 'login'});
+}
+function toHome(){
+    router.push({ name: 'homePage' });
 }
 function searchSong(){
     if (keywords.value == '')
@@ -67,6 +74,7 @@ function logout(){
                 })
                 store.state.isLogin=false;
                 store.state.userInfo ={};
+                router.replace({name:'homePage'});
             }).catch(err=>{
 
             })

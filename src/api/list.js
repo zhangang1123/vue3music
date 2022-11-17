@@ -28,12 +28,13 @@ export function getSingerList(type=-1,area=-1,initial=-1){
         }
     })
 }
-export function getNewSong(type=0){
+export function getNewSong(type=0,limit=20){
     return request({
         url:'/top/song',
         method: 'GET',
         params: {
             type,
+            limit,
         }
     })
 }
@@ -172,6 +173,55 @@ export function getSimiSinger(id){
         method: 'GET',
         params: {
             id
+        }
+    })
+}
+//获取专辑详情
+export function albumDetail(id){
+    return request({
+        url:'/album',
+        method: 'GET',
+        params: {
+            id,
+        }
+    })
+}
+export function albumInfoSize(id){
+    return request({
+        url:'/album/detail/dynamic',
+        method: 'GET',
+        params: {
+            id,
+        }
+    })
+}
+//获取专辑评论
+export function getALbumComment(id,limit,offset=0){
+    return request({
+        url:'/comment/album',
+        method: 'GET',
+        params: {
+            id,
+            limit,
+            offset,
+        }
+    })
+}
+export function getCollectAlbum(limit=25){
+    return request({
+        url:'/album/sublist',
+        method: 'GET',
+        params: {
+            limit,
+        }
+    })
+}
+export function getCollectArtist(limit=25){
+    return request({
+        url:'/artist/sublist',
+        method: 'GET',
+        params: {
+            limit,
         }
     })
 }

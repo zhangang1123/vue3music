@@ -41,7 +41,7 @@
             </div>
         </div>
         <ul class="recommandList">
-            <li class="recommandItem" v-for="item in hotAlbums" :key="item.id" @click="album_view()">
+            <li class="recommandItem" v-for="item in hotAlbums" :key="item.id" @click="album_view(item.id)">
                 <img :src="item.picUrl" alt="专辑封面">
                 <div class="songList_info">{{ item.name }}</div>
             </li>
@@ -105,9 +105,8 @@ function changeRoute(to){
 function singer_view(id) {
     router.push({ name: 'singerDetail', query: { id, } });
 }
-function album_view() {
-    console.log('111')
-    router.push({ name: "albumDetail" });
+function album_view(id) {
+    router.push({ name: "albumDetail",query: { id, } });
 }
 function viewAll()
 {

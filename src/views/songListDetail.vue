@@ -46,7 +46,7 @@
     <ul class="routeList">
         <li class="routeItem" @click="changeRoute('songs')" :class="{ actived: currentPage =='songs'}">歌曲列表</li>
         <li class="routeItem" @click="changeRoute('comment')" :class="{ actived: currentPage =='comment'}">评论({{ songsDetails.commentCount }})</li>
-        <li class="routeItem" @click="changeRoute('收藏')" :class="{ actived: currentPage =='收藏'}">收藏</li>
+        <!-- <li class="routeItem" @click="changeRoute('收藏')" :class="{ actived: currentPage =='收藏'}">收藏</li> -->
     </ul>
     <component :is="currentOpt[currentPage]"></component>
 </div>
