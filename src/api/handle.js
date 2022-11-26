@@ -65,3 +65,27 @@ export function collectAlbum(id,t){
         }
     })
 }
+
+export function updateInfo(gender,signature,nickname,birthday) {
+    return request({
+        url:'/user/update',
+        method: 'GET',
+        params: {
+            gender,
+            signature,
+            nickname,
+            birthday,
+            timestamp:Date.now(),
+        }
+    })
+}
+export function updateAvatar(data){
+    return request({
+        url:`/avatar/upload?timestamp${Date.now()}`,
+        method: 'POST',
+        data,
+        headers:{
+            'Content-Type': 'multipart/form-data',
+        }
+    })
+}

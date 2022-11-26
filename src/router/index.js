@@ -55,6 +55,11 @@ const routes = [
             component:()=>import('../views/songListDetail.vue'),
           },
           {
+            name:'updateInfo',
+            path: '/updateInfo',
+            component:()=>import('../views/updateInfo.vue'),
+          },
+          {
             name:'singerDetail',
             path: '/singerDetail',
             component:()=>import('../views/singerDetail.vue'),

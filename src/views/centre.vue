@@ -19,7 +19,7 @@ async function getloginState() {
         let Info = status.data.data.profile;
         store.commit('changeState', Info);
         getMyLike(Info.userId);
-        
+        console.log(status.data.data.profile)
     }
     else {
         store.state.isLogin = false;

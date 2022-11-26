@@ -49,8 +49,8 @@ export function loginStatus(){
     return request({
         url:'/login/status',
         method: 'GET',
-        // params: {
-
-        // }
+        params: {
+            timestamp:Date.now(),
+        }
     })
 }

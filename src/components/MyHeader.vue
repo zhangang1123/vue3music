@@ -46,6 +46,7 @@ function goLogin()
 {
     if(store.state.isLogin)
     {
+        router.push({ name:'updateInfo'});
         return;
     }
     router.push({ name: 'login'});
